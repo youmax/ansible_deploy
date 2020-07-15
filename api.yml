@@ -1,0 +1,37 @@
+# This playbook uses the win_ping module to test connectivity to Windows hosts
+- name: Update Api 
+  hosts: all 
+  vars:
+    date: "{{ lookup('pipe', 'date +\"%Y%m%d\"') }}"
+  tasks:
+  - name: ping remote server
+    win_ping:
+
+  - name: backup folder
+    win_copy:
+      src: C:\App\XB5_Api01\
+      dest: C:\AppBackup\webapp{{date}}\
+      remote_src: yes
+
+  - name: git pull
+    win_shell: git pull
+    args:
+      chdir: C:\Git\publish_xb3_xb5_n6
+  
+  - name: stop application pool
+    win_shell: C:\Windows\System32\inetsrv\appcmd stop apppool /apppool.name:"XB5_Api01"
+
+  - name: stop website
+    win_shell: C:\Windows\System32\inetsrv\appcmd stop sites "XB5_Api01"
+
+  - name: overwrite folder
+    win_copy:
+      src: C:\Git\publish_xb3_xb5_n6\ 
+      dest: C:\App\XB5_Api01\
+      remote_src: yes
+
+  - name: start application pool
+    win_shell: C:\Windows\System32\inetsrv\appcmd start apppool /apppool.name:"XB5_Api01"
+
+  - name: start website
+    win_shell: C:\Windows\System32\inetsrv\appcmd stop sites "XB5_Api01"
