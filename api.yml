@@ -26,22 +26,28 @@
   #     dest: C:\AppBackup\webapp{{date}}\
   #   with_items: "{{ file_to_copy.files }}"
   
-  - name: Sync content in recursive mode, removing any files/directories found in destination that do not exist in the source
-    win_robocopy:
-      src: C:\App\XB5_Api01
-      dest: C:\AppBackup\webapp{{date}}
-      flags: /E /PURGE /XD bettings logs
+  # - name: Sync content in recursive mode, removing any files/directories found in destination that do not exist in the source
+  #   win_robocopy:
+  #     src: C:\App\XB5_Api01
+  #     dest: C:\AppBackup\webapp{{date}}
+  #     flags: /E /PURGE /XD bettings logs
 
-  - name: git pull
-    win_shell: git pull
-    args:
-      chdir: C:\Git\publish_xb3_xb5_n6
-  
-  - name: stop application pool
-    win_shell: C:\Windows\System32\inetsrv\appcmd stop apppool /apppool.name:"XB5_Api01"
+  # - name: pull from git
+  #   git: git pull
+  #   args:
+  #     chdir: C:\Git\publish_xb3_xb5_n6
+  - name: pull from git
+    git:
+      repo: git@gitlab.noyasoft.com:operationGroup/publish_C8.git
+      dest: C:\Git\publish_C8
+      update: yes
+      version: master
+    
+  # - name: stop application pool
+  #   win_shell: C:\Windows\System32\inetsrv\appcmd stop apppool /apppool.name:"XB5_Api01"
 
-  - name: stop website
-    win_shell: C:\Windows\System32\inetsrv\appcmd stop sites "XB5_Api01"
+  # - name: stop website
+  #   win_shell: C:\Windows\System32\inetsrv\appcmd stop sites "XB5_Api01"
 
   # - name: overwrite folder
   #   win_copy:
@@ -49,8 +55,8 @@
   #     dest: C:\App\XB5_Api01\
   #     remote_src: yes
 
-  - name: start application pool
-    win_shell: C:\Windows\System32\inetsrv\appcmd start apppool /apppool.name:"XB5_Api01"
+  # - name: start application pool
+  #   win_shell: C:\Windows\System32\inetsrv\appcmd start apppool /apppool.name:"XB5_Api01"
 
-  - name: start website
-    win_shell: C:\Windows\System32\inetsrv\appcmd stop sites "XB5_Api01"
+  # - name: start website
+  #   win_shell: C:\Windows\System32\inetsrv\appcmd stop sites "XB5_Api01"
