@@ -4,14 +4,33 @@
   vars:
     date: "{{ lookup('pipe', 'date +\"%Y%m%d\"') }}"
   tasks:
-  - name: ping remote server
+  - name: check node connection
     win_ping:
 
-  - name: backup folder
-    win_copy:
-      src: C:\App\XB5_Api01\
-      dest: C:\AppBackup\webapp{{date}}\
-      remote_src: yes
+  # - name: Find files in path
+  #   win_find:
+  #     paths: C:\App\XB5_Api01
+  #     recurse: yes
+  #     patterns: '^(?!bettings|logs).*'
+  #     use_regex: yes
+  #   register: file_to_copy
+
+  # - name: debug
+  #   debug:
+  #     msg: files to copy {{ file_to_copy }}
+
+  # - name: backup folder
+  #   win_copy:
+  #     remote_src: yes
+  #     src: "{{ item.path }}"
+  #     dest: C:\AppBackup\webapp{{date}}\
+  #   with_items: "{{ file_to_copy.files }}"
+  
+  - name: Sync content in recursive mode, removing any files/directories found in destination that do not exist in the source
+    win_robocopy:
+      src: C:\App\XB5_Api01
+      dest: C:\AppBackup\webapp{{date}}
+      flags: /E /PURGE /XD bettings logs
 
   - name: git pull
     win_shell: git pull
@@ -24,11 +43,11 @@
   - name: stop website
     win_shell: C:\Windows\System32\inetsrv\appcmd stop sites "XB5_Api01"
 
-  - name: overwrite folder
-    win_copy:
-      src: C:\Git\publish_xb3_xb5_n6\ 
-      dest: C:\App\XB5_Api01\
-      remote_src: yes
+  # - name: overwrite folder
+  #   win_copy:
+  #     src: C:\Git\publish_xb3_xb5_n6\ 
+  #     dest: C:\App\XB5_Api01\
+  #     remote_src: yes
 
   - name: start application pool
     win_shell: C:\Windows\System32\inetsrv\appcmd start apppool /apppool.name:"XB5_Api01"
