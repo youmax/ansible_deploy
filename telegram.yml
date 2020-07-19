@@ -1,11 +1,7 @@
 # Telegram
-- name: Send a message to chat in playbook
-  hosts: localhost
-  tasks:
-  - name: send telegram message
-    telegram:
-      token: 1016277538:AAGBh2FyKdDU1G4rAEwDZl8EFcPyOzjgv9I1
-      chat_id: 363203654
-      msg: Ansible task finished
-      register: command_result
-      failed_when: "'FAILED' in command_result.stderr"
+- name: send telegram message
+  delegate_to: localhost
+  telegram:
+    token: 1016277538:AAGMXjEjRsi6plu5RMulnSAlA4fQ6Hz7wVs
+    chat_id: 363203654
+    msg: "{{ msg }}"
