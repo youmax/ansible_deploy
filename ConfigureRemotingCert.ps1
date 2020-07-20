@@ -15,14 +15,14 @@ Get-ChildItem -Path WSMan:\localhost\Listener | Where-Object { $_.Keys -contains
 Write-Host "start certificate authentication (optional)"
 Set-Item -Path WSMan:\localhost\Service\Auth\Certificate -Value $true
 $cert = LoadCert
-
+## Import the public key into Trusted Root Certification Authorities
 $store_name = [System.Security.Cryptography.X509Certificates.StoreName]::Root
 $store_location = [System.Security.Cryptography.X509Certificates.StoreLocation]::LocalMachine
 $store = New-Object -TypeName System.Security.Cryptography.X509Certificates.X509Store -ArgumentList $store_name, $store_location
 $store.Open("MaxAllowed")
 $store.Add($cert)
 $store.Close()
-
+## Import the public key into Trusted People
 $store_name = [System.Security.Cryptography.X509Certificates.StoreName]::TrustedPeople
 $store_location = [System.Security.Cryptography.X509Certificates.StoreLocation]::LocalMachine
 $store = New-Object -TypeName System.Security.Cryptography.X509Certificates.X509Store -ArgumentList $store_name, $store_location
