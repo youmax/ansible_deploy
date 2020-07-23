@@ -14,16 +14,16 @@
             dest: C:\AppBackup\webapp{{date}}
             flags: /E /PURGE /XD bettings logs
         
-        - name: 如果目錄不存在,拉取Publish_C8
-          win_shell: git clone http://{{gitlab_user}}:{{gitlab_pwd}}@gitlab.noyasoft.com/operationGroup/publish_C8.git
+        - name: 如果目錄不存在,拉取publish_xb3_xb5_n6
+          win_shell: git clone http://{{gitlab_user}}:{{gitlab_pwd}}@gitlab.noyasoft.com/operationGroup/publish_xb3_xb5_n6.git
           args:
             chdir: C:\Git
-            creates: C:\Git\publish_C8
+            creates: C:\Git\publish_xb3_xb5_n6
 
-        - name: 更新Publish_C8
-          win_shell: git pull http://{{gitlab_user}}:{{gitlab_pwd}}@gitlab.noyasoft.com/operationGroup/publish_C8.git
+        - name: 更新publish_xb3_xb5_n6
+          win_shell: git pull http://{{gitlab_user}}:{{gitlab_pwd}}@gitlab.noyasoft.com/operationGroup/publish_xb3_xb5_n6.git
           args:
-            chdir: C:\Git\publish_C8
+            chdir: C:\Git\publish_xb3_xb5_n6
         
         - name: 暂停web服务
           win_shell: |
@@ -46,14 +46,14 @@
           vars:
             msg: "all tasks finished"
       rescue:
-        # - debug:
-        #     msg: "revert from backup"
-        # - win_robocopy:
-        #     dest: C:\App\XB5_Api01
-        #     src: C:\AppBackup\webapp{{date}}
-        # - win_shell: |
-        #     C:\Windows\System32\inetsrv\appcmd start apppool /apppool.name: XB5_Api01
-        #     C:\Windows\System32\inetsrv\appcmd start sites XB5_Api01
+        - debug:
+            msg: "revert from backup"
+        - win_robocopy:
+            dest: C:\App\XB5_Api01
+            src: C:\AppBackup\webapp{{date}}
+        - win_shell: |
+            C:\Windows\System32\inetsrv\appcmd start apppool /apppool.name: XB5_Api01
+            C:\Windows\System32\inetsrv\appcmd start sites XB5_Api01
         - debug:
             msg:
               - "{'name': {{ ansible_failed_task.name }}, 'msg': {{ ansible_failed_result.stderr }}}"
