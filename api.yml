@@ -30,11 +30,11 @@
             C:\Windows\System32\inetsrv\appcmd stop apppool /apppool.name: XB5_Api01
             C:\Windows\System32\inetsrv\appcmd stop sites XB5_Api01
         
-        - name: 䨱盖web目录，排除档案Web.config
+        - name: 䨱盖web目录，排除目录Config, 排除档案Web.config
           win_robocopy:
             src: C:\Git\publish_xb3_xb5_n6\(4)webApp-v1.3.72hotfix2\LotteryWeb
             dest: C:\App\XB5_Api01\
-            flags: /E /PURGE /XF Web.config
+            flags: /E /PURGE /XD Config /XF Web.config
 
         - name: 啓动web服务
           win_shell: |
