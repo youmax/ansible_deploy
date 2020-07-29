@@ -11,7 +11,7 @@
         - name: 同步目录
           win_robocopy:
             src: C:\App\XB5_Signalr
-            dest: C:\AppBackup\webapp{{date}}
+            dest: C:\AppBackup\Signalr\webapp{{date}}
             flags: /E /PURGE
         
         - name: 如果目錄不存在,拉取publish_general
@@ -50,7 +50,7 @@
             msg: "revert from backup"
         - win_robocopy:
             dest: C:\App\XB5_Signalr
-            src: C:\AppBackup\webapp{{date}}
+            src: C:\AppBackup\Signalr\webapp{{date}}
         - win_shell: |
             C:\Windows\System32\inetsrv\appcmd start apppool /apppool.name: XB5_Signalr
             C:\Windows\System32\inetsrv\appcmd start sites XB5_Signalr
