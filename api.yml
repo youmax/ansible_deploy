@@ -1,4 +1,4 @@
-- name: Update Api
+- name: 更新 Api
   hosts: all
   vars:
     date: '{{ lookup(''pipe'', ''date +"%Y%m%d"'') }}'
@@ -11,7 +11,7 @@
         - name: 同步目录，排除bettings,logs目录
           win_robocopy:
             src: C:\App\XB5_Api01
-            dest: C:\AppBackup\webapp{{date}}
+            dest: C:\AppBackup\Api\webapp{{date}}
             flags: /E /PURGE /XD bettings logs
         
         - name: 如果目錄不存在,拉取publish_xb3_xb5_n6
@@ -50,7 +50,7 @@
             msg: "revert from backup"
         - win_robocopy:
             dest: C:\App\XB5_Api01
-            src: C:\AppBackup\webapp{{date}}
+            src: C:\AppBackup\Api\webapp{{date}}
         - win_shell: |
             C:\Windows\System32\inetsrv\appcmd start apppool /apppool.name: XB5_Api01
             C:\Windows\System32\inetsrv\appcmd start sites XB5_Api01

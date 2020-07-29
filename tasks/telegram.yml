@@ -1,7 +1,0 @@
-# Telegram
-- name: send telegram message
-  delegate_to: localhost
-  telegram:
-    token: 1016277538:AAGMXjEjRsi6plu5RMulnSAlA4fQ6Hz7wVs
-    chat_id: -361257916
-    msg: "{{ msg }}"
