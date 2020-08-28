@@ -1,0 +1,6 @@
+---
+# tasks
+- name: '{{ cmd }} iis'
+  win_shell: |
+    C:\Windows\System32\inetsrv\appcmd {{ cmd }} apppool /apppool.name:{{ site }}
+    C:\Windows\System32\inetsrv\appcmd {{ cmd }} sites {{ site }}

@@ -1,0 +1,13 @@
+---
+# tasks for ansible_deploy
+
+- name: git clone if folder is not exist
+  win_shell: git clone {{ git_repository_url }}
+  args:
+    chdir: '{{ git_folder_path }}\..'
+    creates: '{{ git_folder_path }}'
+
+- name: git pull
+  win_shell: git pull {{ git_repository_url }}
+  args:
+    chdir: '{{ git_folder_path }}'

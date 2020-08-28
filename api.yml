@@ -1,60 +1,25 @@
-- name: 更新 Api
+- name: configure and deploy the API webservers and application code
   hosts: all
   gather_facts: false
+  vars_files:
+    - group_vars/gitlab.yml
   vars:
     date: '{{ lookup(''pipe'', ''date +"%Y%m%d"'') }}'
-  vars_files:
-    - vars/gitlab.yml
+    site: 'XB5_Api01'
+    git_repository_url: 'http://{{gitlab_user}}:{{gitlab_pwd}}@gitlab.noyasoft.com/operationGroup/publish_xb3_xb5_n6.git'
+    git_folder_path: 'C:\Git\publish_xb3_xb5_n6'
+    web_folder: C:\App\{{ site }}
+    backup_folder: C:\AppBackup\Api\webapp{{ date }}
+    backup_exclude_folder: 'bettings logs'
+    backup_exclude_file: ''
+    update_folder: C:\Git\publish_xb3_xb5_n6\(4)webApp-v1.3.72hotfix2\LotteryWeb
+    update_exclude_folder: 'Config'
+    update_exclude_file: 'Web.config'
   tasks:
-    - name: update service
-      block:
-        - name: 同步目录，排除bettings,logs目录
-          win_robocopy:
-            src: C:\App\XB5_Api01
-            dest: C:\AppBackup\Api\webapp{{date}}
-            flags: /E /PURGE /XD bettings logs
-        
-        - name: 如果目錄不存在,拉取publish_xb3_xb5_n6
-          win_shell: git clone http://{{gitlab_user}}:{{gitlab_pwd}}@gitlab.noyasoft.com/operationGroup/publish_xb3_xb5_n6.git
-          args:
-            chdir: C:\Git
-            creates: C:\Git\publish_xb3_xb5_n6
-
-        - name: 更新publish_xb3_xb5_n6
-          win_shell: git pull http://{{gitlab_user}}:{{gitlab_pwd}}@gitlab.noyasoft.com/operationGroup/publish_xb3_xb5_n6.git
-          args:
-            chdir: C:\Git\publish_xb3_xb5_n6
-        
-        - name: 暂停web服务
-          win_shell: |
-            C:\Windows\System32\inetsrv\appcmd stop apppool /apppool.name:XB5_Api01
-            C:\Windows\System32\inetsrv\appcmd stop sites XB5_Api01
-        
-        - name: 䨱盖web目录，排除Config, 排除档案Web.config
-          win_robocopy:
-            src: C:\Git\publish_xb3_xb5_n6\(4)webApp-v1.3.72hotfix2\LotteryWeb
-            dest: C:\App\XB5_Api01\
-            flags: /E /PURGE /XD Config /XF Web.config
-
-        - name: 啓动web服务
-          win_shell: |
-            C:\Windows\System32\inetsrv\appcmd start apppool /apppool.name:XB5_Api01
-            C:\Windows\System32\inetsrv\appcmd start sites XB5_Api01
-
-        # - name: 发送通知
-        #   import_tasks: telegram.yml
-        #   vars:
-        #     msg: "all tasks finished"
+    - block: 
+      - include_role: 
+          name: web
       rescue:
-        - debug:
-            msg: "revert from backup"
-        - win_robocopy:
-            dest: C:\App\XB5_Api01
-            src: C:\AppBackup\Api\webapp{{date}}
-        - win_shell: |
-            C:\Windows\System32\inetsrv\appcmd start apppool /apppool.name:XB5_Api01
-            C:\Windows\System32\inetsrv\appcmd start sites XB5_Api01
-        # - import_tasks: telegram.yml
-        #   vars:
-        #     msg: "error"
-            # msg: "'name': {{ ansible_failed_task.name }}, 'msg': {{ ansible_failed_result.stderr }}"
+      - include_role:
+          name: web
+          tasks_from: recover 

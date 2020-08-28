@@ -1,0 +1,12 @@
+---
+# tasks for ansible_deploy
+
+- name: sync folder
+  win_robocopy:
+    src: '{{ src }}'
+    dest: '{{ dst }}'
+    flags: /E /PURGE /XD {{ exclude_folder }} /XF {{ exclude_file }}
+
+- name: debug
+  debug:
+    msg: sync folder from {{ src }} to {{ dst }}, exclude_folder {{ exclude_folder }}, exclude_file {{ exclude_file }}

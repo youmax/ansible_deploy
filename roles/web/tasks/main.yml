@@ -1,0 +1,21 @@
+---
+- include: sync_folder.yml
+  vars:
+    src: "{{ web_folder }}"
+    dst: "{{ backup_folder }}"
+    exclude_folder: "{{ backup_exclude_folder }}" 
+    exclude_file: "{{ backup_exclude_file }}"
+
+- include: update_code.yml
+- include: iis.yml
+  vars: 
+    cmd: stop
+- include: sync_folder.yml
+  vars:
+    src: "{{ update_folder }}"
+    dst: "{{ web_folder }}"
+    exclude_folder: "{{ update_exclude_folder }}" 
+    exclude_file: "{{ update_exclude_file }}"
+- include: iis.yml
+  vars: 
+    cmd: start

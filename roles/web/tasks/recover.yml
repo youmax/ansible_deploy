@@ -1,0 +1,16 @@
+---
+# tasks for ansible_deploy
+- include: iis.yml
+  vars: 
+    cmd: stop
+
+- include: sync_folder.yml
+  vars:
+    src: "{{ backup_folder }}"
+    dst: "{{ web_folder }}"
+    exclude_folder: "" 
+    exclude_file: ""
+
+- include: iis.yml
+  vars: 
+    cmd: start
