@@ -1,0 +1,16 @@
+- name: configure and deploy the API webservers and application code
+  hosts: all
+  gather_facts: false
+  vars:
+    date: '{{ lookup(''pipe'', ''date +"%Y%m%d"'') }}'
+  vars_files:
+    - group_vars/gitlab.yml
+    # - group_vars/api.yml
+  tasks:
+    - block: 
+      - include_role: 
+          name: web
+      rescue:
+      - include_role:
+          name: web
+          tasks_from: recover 
