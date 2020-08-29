@@ -1,4 +1,9 @@
 ---
+
+- name: backup and update site
+  debug:
+    msg: 'Start backup and update site {{ site }}'
+
 - include: sync_folder.yml
   vars:
     src: "{{ web_folder }}"

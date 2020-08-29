@@ -3,13 +3,19 @@
   gather_facts: false
   vars:
     date: '{{ lookup(''pipe'', ''date +"%Y%m%d"'') }}'
+    # recover: true
   vars_files:
     - group_vars/gitlab.yml
-    # - group_vars/api.yml
+    # - group_vars/xinbao/api.yml
   tasks:
     - block: 
       - include_role: 
           name: web
+        when: recover is undefined
+      - include_role:
+          name: web
+          tasks_from: recover 
+        when: recover is defined
       rescue:
       - include_role:
           name: web

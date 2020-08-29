@@ -1,5 +1,9 @@
 ---
 # tasks for ansible_deploy
+- name: restore site from backup
+  debug:
+    msg: 'Start restore site {{ site }}'
+
 - include: iis.yml
   vars: 
     cmd: stop
