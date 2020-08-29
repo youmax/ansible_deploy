@@ -1,8 +1,8 @@
-# Deploy
+# Ansible Deploy for windows custom service
 
-## Certificate Authentication 設定
+## Linux Control Node Installation
 
-- Control Node 安裝 ansible & pywinrm
+Setup Linux control node with commands below
 
 ```cmd
 sudo apt install python3
@@ -11,22 +11,28 @@ pip3 install ansible
 pip3 install "pywinrm>=0.3.0"
 ```
 
-- Control Node 使用 OPENSSH 指令產生 certificate
+## Windows Managed Node Installation
+
+To run ansible scripts on Windows managed nodes, you need to install **windows-OpenSSH**
+
+- copy files/openssh folder into your Windows machine
+
+- cd /path/to/openssh_folder
+
+- replace content of administrators_authorized_keys with your public key stored in Linux Control Node
+
+- run ./install-service.ps1 in Powershell as Administrator
+
+The script will automatically install sshd service , setup public_key authorization, and allow tcp 22 input on Firewall.
+
+Once you have done the instruction properly, connect to Windows Node from Linux Control Node via SSH, then input the password on prompt and then you can use ansible with Windows!
+
+## How to run script
+
+You could easily run script with ansible playboook command.
 
 ```cmd
-$ USERNAME="username"    //username請填要登入managed node的使用者名稱
-$ cat > openssl.conf << EOL
-distinguished_name = req_distinguished_name
-[req_distinguished_name]
-[v3_req_client]
-extendedKeyUsage = clientAuth
-subjectAltName = otherName:1.3.6.1.4.1.311.20.2.3;UTF8:$USERNAME@localhost
-EOL
-$ export OPENSSL_CONF=openssl.conf
-$ openssl req -x509 -nodes -days 3650 -newkey rsa:2048 -out cert.pem -outform PEM -keyout cert_key.pem -subj "/CN=$USERNAME" -extensions v3_req_client
-$ rm openssl.conf
+# run command with predefined vars file
+ansible-playbook xinbao.yml --extra-vars "@group_vars/xinbao/api.yml"
+
 ```
-
-## 設定 Managed Node Winrm
-
-- Copy ConfigureRemotingCert 檔案至 Windows Managed Node, 修改 username, password 後執行
