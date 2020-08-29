@@ -1,0 +1,11 @@
+---
+site: 'XB5_Payment'
+git_repository_url: 'http://{{gitlab_user}}:{{gitlab_pwd}}@gitlab.noyasoft.com/operationGroup/publish_general.git'
+git_folder_path: 'C:\Git\publish_general'
+web_folder: C:\App\{{ site }}
+backup_folder: C:\AppBackup\Payment\webapp{{ date }}
+backup_exclude_folder: ''
+backup_exclude_file: ''
+update_folder: C:\Git\publish_general\(6)payment
+update_exclude_folder: ''
+update_exclude_file: 'web.config'

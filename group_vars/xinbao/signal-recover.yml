@@ -1,0 +1,5 @@
+---
+site: 'XB5_Signalr'
+web_folder: C:\App\{{ site }}
+backup_folder: C:\AppBackup\Signalr\webapp{{ date }}
+recover: true

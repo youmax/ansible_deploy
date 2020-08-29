@@ -1,0 +1,5 @@
+---
+site: 'XB5_Payment'
+web_folder: C:\App\{{ site }}
+backup_folder: C:\AppBackup\Payment\webapp{{ date }}
+recover: true

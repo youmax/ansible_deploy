@@ -1,0 +1,11 @@
+---
+site: 'XB5_Admin'
+git_repository_url: 'http://{{gitlab_user}}:{{gitlab_pwd}}@gitlab.noyasoft.com/operationGroup/publish_general.git'
+git_folder_path: 'C:\Git\publish_general'
+web_folder: C:\App\{{ site }}
+backup_folder: C:\AppBackup\Admin\webapp{{ date }}
+backup_exclude_folder: ''
+backup_exclude_file: ''
+update_folder: C:\Git\publish_general\(2)admin\(1)admin完整版
+update_exclude_folder: 'Config'
+update_exclude_file: 'Web.config'

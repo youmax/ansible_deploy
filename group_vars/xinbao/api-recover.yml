@@ -1,0 +1,5 @@
+---
+site: 'XB5_Api01'
+web_folder: C:\App\{{ site }}
+backup_folder: C:\AppBackup\Api\webapp{{ date }}
+recover: true

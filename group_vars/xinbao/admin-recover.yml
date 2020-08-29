@@ -1,0 +1,5 @@
+---
+site: 'XB5_Admin'
+web_folder: C:\App\{{ site }}
+backup_folder: C:\AppBackup\Admin\webapp{{ date }}
+recover: true
